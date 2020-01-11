@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/nam/my_work/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/nam/my_work/src/depthimage_to_laserscan/include/**",
+                "/home/nam/my_work/src/omni_wheel_ros/include/**",
+                "/home/nam/my_work/src/ros_esp8266/include/**",
+                "/home/nam/my_work/src/rostest/include/**",
+                "/usr/include/**",
+                "/opt/ros/melodic/include"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
