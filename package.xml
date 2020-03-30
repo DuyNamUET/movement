@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>omni_wheel_ros</name>
+  <name>movement</name>
   <version>0.0.0</version>
-  <description>The omni_wheel_ros package</description>
+  <description>The movement package</description>
 
   <maintainer email="duynamk63uet@gmail.com">Nam BUI DUY</maintainer>
 
