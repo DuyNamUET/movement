@@ -9,7 +9,7 @@
 
 geometry_msgs::Twist vel;
 void robotSetVelSub(const geometry_msgs::Twist::ConstPtr& msg);
-void convertVel2Speed(const geometry_msgs::Twist& robot_vel, int& spl, int& spr);
+void convertVel2Speed(const geometry_msgs::Twist& robot_vel, std_msgs::Int16& spl, std_msgs::Int16& spr);
 
 int main(int argc, char**argv)
 {
@@ -22,14 +22,14 @@ int main(int argc, char**argv)
 
     // publish speed of each motor
     ros::Publisher pub_speed_left = nh.advertise<std_msgs::Int16>("/speed_left", 100);
-    ros::Publisher pub_speed_right = nh.advertise<std_msgs::Int16>("/spped_right", 100);
+    ros::Publisher pub_speed_right = nh.advertise<std_msgs::Int16>("/speed_right", 100);
     
     ros::Rate r(1000);
     while (nh.ok())
     {
         std_msgs::Int16 spl, spr;
         // convert robot's vel to speed of each motor
-        convertVel2Speed(vel, spl.data, spr.data);
+        convertVel2Speed(vel, spl, spr);
         pub_speed_left.publish(spl);
         pub_speed_right.publish(spr);
         r.sleep();
@@ -45,7 +45,7 @@ void robotSetVelSub(const geometry_msgs::Twist::ConstPtr& msg)
     return;
 }
 
-void convertVel2Speed(const geometry_msgs::Twist& robot_vel, int& spl, int& spr)
+void convertVel2Speed(const geometry_msgs::Twist& robot_vel, std_msgs::Int16& spl, std_msgs::Int16& spr)
 {
     // do something here
     return;
