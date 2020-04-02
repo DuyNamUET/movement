@@ -20,3 +20,7 @@ $ git clone https://github.com/DuyNamUET/movement
 $ cd ..
 $ catkin_make
 ```
+Run
+```
+$ roslaunch movement run_motor.launch
+```
