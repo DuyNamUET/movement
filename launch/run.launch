@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="rosserial_client" name="make_libraries" type="make_libraries" src="" />
-</launch>
