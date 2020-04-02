@@ -1,9 +1,11 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include <std_msgs/Int8>
+#include <std_msgs/Int16.h>
 
 // define some specification of robot
-
+#define MAX_SPEED 1000  // step per second
+#define R 0.06      // radius of wheel
+#define MAX_VEL 2   // m/s (max velocity of robot)
 
 geometry_msgs::Twist vel;
 void robotSetVelSub(const geometry_msgs::Twist::ConstPtr& msg);
@@ -19,15 +21,15 @@ int main(int argc, char**argv)
     ros::Subscriber sub_set_vel = nh.subscribe("/robot/cmd_vel", 1000, &robotSetVelSub);
 
     // publish speed of each motor
-    ros::Publisher pub_speed_left = nh.advertise<std_msgs::Int8>("/speed_left", 100);
-    ros::Publisher pub_speed_right = nh.advertise<std_msgs::Int8>("/spped_right", 100);
+    ros::Publisher pub_speed_left = nh.advertise<std_msgs::Int16>("/speed_left", 100);
+    ros::Publisher pub_speed_right = nh.advertise<std_msgs::Int16>("/spped_right", 100);
     
     ros::Rate r(1000);
     while (nh.ok())
     {
-        int spl, spr;
+        std_msgs::Int16 spl, spr;
         // convert robot's vel to speed of each motor
-        convertVel2Speed(vel, spl, spr);
+        convertVel2Speed(vel, spl.data, spr.data);
         pub_speed_left.publish(spl);
         pub_speed_right.publish(spr);
         r.sleep();
@@ -45,5 +47,6 @@ void robotSetVelSub(const geometry_msgs::Twist::ConstPtr& msg)
 
 void convertVel2Speed(const geometry_msgs::Twist& robot_vel, int& spl, int& spr)
 {
+    // do something here
     return;
 }

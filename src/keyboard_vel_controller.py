@@ -20,12 +20,6 @@ Moving around:
    j    k    l
    m    ,    .
 
-For Holonomic mode (strafing), hold down the shift key:
----------------------------
-   U    I    O
-   J    K    L
-   M    <    >
-
 t : up (+z)
 b : down (-z)
 
@@ -47,14 +41,6 @@ moveBindings = {
         ',':(-1,0,0,0),
         '.':(-1,0,0,1),
         'm':(-1,0,0,-1),
-        'O':(1,-1,0,0),
-        'I':(1,0,0,0),
-        'J':(0,1,0,0),
-        'L':(0,-1,0,0),
-        'U':(1,1,0,0),
-        '<':(-1,0,0,0),
-        '>':(-1,-1,0,0),
-        'M':(-1,1,0,0),
         't':(0,0,1,0),
         'b':(0,0,-1,0),
     }
@@ -82,7 +68,7 @@ def vels(speed,turn):
 if __name__=="__main__":
     settings = termios.tcgetattr(sys.stdin)
 
-    pub = rospy.Publisher('/robot/set_vel', Twist, queue_size = 1)
+    pub = rospy.Publisher('/robot/cmd_vel', Twist, queue_size = 1)
     rospy.init_node('teleop_twist_keyboard')
 
     speed = rospy.get_param("~speed", 0.5)
