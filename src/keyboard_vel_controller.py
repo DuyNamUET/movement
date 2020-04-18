@@ -10,7 +10,10 @@ from geometry_msgs.msg import Twist
 
 import sys, select, termios, tty
 
-MAX_SPEED = 2
+PI = 3.14159265
+MAX_W = 20                 # rpm
+R = 0.06                   # radius of wheel
+MAX_VEL = R*MAX_W*2*PI/60  # m/s (max velocity of robot)
 
 msg = """
 Reading from the keyboard  and Publishing to Twist!
@@ -19,9 +22,6 @@ Moving around:
    u    i    o
    j    k    l
    m    ,    .
-
-t : up (+z)
-b : down (-z)
 
 anything else : stop
 
@@ -41,8 +41,6 @@ moveBindings = {
         ',':(-1,0,0,0),
         '.':(-1,0,0,1),
         'm':(-1,0,0,-1),
-        't':(0,0,1,0),
-        'b':(0,0,-1,0),
     }
 
 speedBindings={
@@ -71,8 +69,8 @@ if __name__=="__main__":
     pub = rospy.Publisher('/robot/cmd_vel', Twist, queue_size = 1)
     rospy.init_node('keyboard_vel_controller')
 
-    speed = rospy.get_param("~speed", 0.5)
-    turn = rospy.get_param("~turn", 1.0)
+    speed = rospy.get_param("~speed", 0.05)
+    turn = rospy.get_param("~turn", 0.05)
     x = 0
     y = 0
     z = 0
@@ -90,8 +88,8 @@ if __name__=="__main__":
                 z = moveBindings[key][2]
                 th = moveBindings[key][3]
             elif key in speedBindings.keys():
-                speed = min(speed * speedBindings[key][0], MAX_SPEED)
-                turn = min(turn * speedBindings[key][1], MAX_SPEED)
+                speed = min(speed * speedBindings[key][0], MAX_VEL)
+                turn = min(turn * speedBindings[key][1], MAX_VEL)
 
                 print(vels(speed,turn))
                 if (status == 14):
