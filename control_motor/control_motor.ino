@@ -32,12 +32,12 @@ ros::NodeHandle nh;
 int spl,spr;
 void speedLeftSub(const std_msgs::Int16& msg)
 {
-    spl = msg->data;
+    spl = msg.data;
 }
 
 void speedRightSub(const std_msgs::Int16& msg)
 {
-    spr = msg->data;
+    spr = msg.data;
 }
 
 ros::Subscriber<std_msgs::Int16> spl_sub("/speed_left",&speedLeftSub);
@@ -51,7 +51,8 @@ void setup()
     nh.subscribe(spr_sub);
 
     // set max steps per second
-    stepper.setMaxSpeed(MAX_SPEED);
+    stepL.setMaxSpeed(MAX_SPEED);
+    stepR.setMaxSpeed(MAX_SPEED);
 }
 
 void loop()
