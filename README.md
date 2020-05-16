@@ -3,7 +3,7 @@ Type of motion: Two wheeled differential drive <br>
 Motor type: Stepper motor <br>
 Stepper motor name: 28BYJ-48 <br>
 Driver: ULN2003 <br>
-Power input: 11.1V <br>
+Power input: 5V <br>
 Max speed of stepper in this input about 20-25rpm (need to check) <br>
 
 ## Step to step
@@ -21,6 +21,8 @@ $ cd ..
 $ catkin_make
 ```
 Run
+Firstly, check your port Arduino and change parameter on launch file <br>
+Then
 ```
 $ roslaunch movement run_motor.launch
 ```

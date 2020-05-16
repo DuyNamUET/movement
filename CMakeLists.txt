@@ -13,10 +13,5 @@ catkin_package(CATKIN_DEPENDS)
 
 include_directories(${catkin_INCLUDE_DIRS})
 
-add_executable(convert2speed src/convertVel2SpeedMotor.cpp)
-target_link_libraries(convert2speed ${catkin_LIBRARIES})
-
-catkin_install_python(PROGRAMS
-  src/keyboard_vel_controller.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+add_executable(control_directly src/controlDirectly.cpp)
+target_link_libraries(control_directly ${catkin_LIBRARIES})
