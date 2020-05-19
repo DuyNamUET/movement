@@ -10,10 +10,10 @@
 #define stepLPin3 10    //IN3
 #define stepLPin4 11    //IN4
 // right stepper pin definitions
-#define stepRPin1 4     //IN1
-#define stepRPin2 5     //IN2
-#define stepRPin3 6     //IN3
-#define stepRPin4 7     //IN4
+#define stepRPin1 3     //IN1
+#define stepRPin2 4     //IN2
+#define stepRPin3 5     //IN3
+#define stepRPin4 6     //IN4
 
 // define max step per second of stepper motor
 #define MAX_SPEED 1216

@@ -108,8 +108,8 @@ void convertTwist2Speed(geometry_msgs::Twist vel, std_msgs::Int16& spl, std_msgs
     else if(vr < -MAX_VEL) vr = -MAX_VEL;
 
     // convert to stepper
-    spl.data = int(vl/R*60/(2*PI)/MAX_W*MAX_SPEED);
-    spr.data = int(vr/R*60/(2*PI)/MAX_W*MAX_SPEED);
+    spl.data = int(vl/MAX_VEL*MAX_SPEED);
+    spr.data = int(vr/MAX_VEL*MAX_SPEED);
     return;
 }
 
