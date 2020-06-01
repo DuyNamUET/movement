@@ -12,13 +12,13 @@
 std::map<char, std::vector<float>> moveBindings
 {
   {'i', {1, 0, 0, 0}},
-  {'o', {1, 0, 0, -1}},
+//   {'o', {1, 0, 0, -1}},
   {'j', {0, 0, 0, 1}},
   {'l', {0, 0, 0, -1}},
-  {'u', {1, 0, 0, 1}},
+//   {'u', {1, 0, 0, 1}},
   {',', {-1, 0, 0, 0}},
-  {'.', {-1, 0, 0, 1}},
-  {'m', {-1, 0, 0, -1}},
+//   {'.', {-1, 0, 0, 1}},
+//   {'m', {-1, 0, 0, -1}},
   {'k', {0, 0, 0, 0}},
 };
 
@@ -37,9 +37,9 @@ std::map<char, std::vector<float>> speedBindings
 const char* msg = R"(
 ---------------------------
 Moving around:
-   u    i    o
+        i    
    j    k    l
-   m    ,    .
+        ,    
 
 anything else : stop
 q/z : increase/decrease max speeds by 10%
@@ -55,10 +55,12 @@ const int MAX_W = 19;                   // rpm
 const float R = 0.065;                  // radius of wheel
 const float L = 0.15;                   // distance between 2 wheels
 const float MAX_VEL = R*MAX_W*2*PI/60;  // m/s (max velocity of robot)
+const float MAX_ANG = MAX_W*2*PI/60*2*R/L;// m/s (max velocity of robot)
+const float MAX = MAX_W*2*PI/60;        // rad/s
 
 // Init variables
-float speed(0.05);              // Linear velocity (m/s)
-float turn(0.05);               // Angular velocity (rad/s)
+float speed(0.1);              // Linear velocity (m/s)
+float turn(1.0);               // Angular velocity (rad/s)
 float x(0), y(0), z(0), th(0);  // Forward/backward/neutral direction vars
 char key(' ');
 
@@ -99,17 +101,13 @@ void convertTwist2Speed(geometry_msgs::Twist vel, std_msgs::Int16& spl, std_msgs
     float az = vel.angular.z;
 
     // convert to velocity of each motor
-    float vl = lx - L*az/2;
-    if(vl > MAX_VEL) vl = MAX_VEL;
-    else if(vl < -MAX_VEL) vl = -MAX_VEL;
+    float vl = (2*lx - L*az)/2/R;
     
-    float vr = lx + L*az/2;
-    if(vr > MAX_VEL) vr = MAX_VEL;
-    else if(vr < -MAX_VEL) vr = -MAX_VEL;
+    float vr = (2*lx + L*az)/2/R;
 
     // convert to stepper
-    spl.data = int(vl/MAX_VEL*MAX_SPEED);
-    spr.data = int(vr/MAX_VEL*MAX_SPEED);
+    spl.data = int(vl/MAX*MAX_SPEED);
+    spr.data = int(vr/MAX*MAX_SPEED);
     return;
 }
 
@@ -129,7 +127,7 @@ int main(int argc, char** argv)
     std_msgs::Int16 spl, spr;
 
     printf("%s", msg);
-    printf("\rCurrent: speed %f\tturn %f | Awaiting command...\r", speed, turn);
+    printf("\rCurrent: speed %f m/s\tturn %f rad/s | Awaiting command...\r", speed, turn);
 
     while(true){
 
@@ -145,7 +143,7 @@ int main(int argc, char** argv)
             z = moveBindings[key][2];
             th = moveBindings[key][3];
 
-            printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
+            printf("\rCurrent: speed %f m/s\tturn %f rad/s | Last command: %c   ", speed, turn, key);
         }
 
         // Otherwise if it corresponds to a key in speedBindings
@@ -153,9 +151,9 @@ int main(int argc, char** argv)
         {
             // Grab the speed data
             speed = std::min(speed * speedBindings[key][0], MAX_VEL);
-            turn = std::min(turn * speedBindings[key][1], MAX_VEL);
+            turn = std::min(turn * speedBindings[key][1], MAX_ANG);
 
-            printf("\rCurrent: speed %f\tturn %f | Last command: %c   ", speed, turn, key);
+            printf("\rCurrent: speed %f m/s\tturn %f rad/s | Last command: %c   ", speed, turn, key);
         }
 
         // Otherwise, set the robot to stop
@@ -169,7 +167,7 @@ int main(int argc, char** argv)
             // If ctrl-C (^C) was pressed, terminate the program
             if (key == '\x03') break;
 
-        printf("\rCurrent: speed %f\tturn %f | Invalid command! %c", speed, turn, key);
+        printf("\rCurrent: speed %f m/s\tturn %f rad/s| Invalid command! %c", speed, turn, key);
         }
 
         // Update the Twist message
@@ -179,7 +177,7 @@ int main(int argc, char** argv)
 
         twist.angular.x = 0;
         twist.angular.y = 0;
-        twist.angular.z = th * turn, MAX_VEL;
+        twist.angular.z = th * turn;
 
         convertTwist2Speed(twist, spl, spr);
         // Publish it and resolve any remaining callbacks
